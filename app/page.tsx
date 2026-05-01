@@ -1,12 +1,12 @@
 import Link from "next/link";
-import { TECH_STACK } from "@/utils/constants";
+import { TECH_STACK, METRIK_URL, GH_URL } from "@/utils/constants";
 
 export default function Home() {
     return (
         <main className="container grow max-w-3xl flex flex-col items-center justify-center gap-8 text-center">
             <h1 className="text-40">Quote Tables Showcase</h1>
             <div>
-                <p className="mb-4">Here you can find a showcase of the quote tables used in my SasS <Link href="https://metrik-eight.vercel.app" target="_blank" rel="noopener noreferrer" className="btn btn--tertiary">Metrik<span className="sr-only">Opens in new tab</span></Link>.</p>
+                <p className="mb-4">Here you can find a showcase of the quote tables used in my SasS <Link href={METRIK_URL} target="_blank" rel="noopener noreferrer" className="btn btn--tertiary">Metrik<span className="sr-only">Opens in new tab</span></Link>.</p>
                 <p>This is a construction quote table presentation I made to show my product, design and full-stack development skills. Feel free to try it out and visit the repo to learn more about the project.</p>
             </div>
             <div className="flex flex-wrap gap-2">
@@ -18,7 +18,7 @@ export default function Home() {
                     Try it now!
                 </Link>
                 <Link
-                    href="https://github.com/leandro-cordero/quote-tables"
+                    href={GH_URL}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="grow btn btn--secondary"
