@@ -1,0 +1,90 @@
+@import "tailwindcss";
+
+:root {
+    --color-glass-dark-val: rgba(0, 0, 0, 0.25);
+    --color-glass-light-val: rgba(255, 255, 255, 0.25);
+    --color-blanket-val: rgba(0, 0, 0, 0.85);
+}
+
+@theme {
+    /* Brand Colors */
+    --color-primary: #FD6F08;
+    --color-primary-hover: #E45100;
+    --color-primary-dark: #AD370E;
+    --color-secondary: #FFE53E;
+    --color-brand-gradient: linear-gradient(90deg, #FD6F08 50%, #FFE53E 100%);
+    /* Neutral Colors */
+    --color-base: #121212;
+    --color-surface: #1E1E1E;
+    --color-border: #2A2A2A;
+    --color-border-strong: #3A3A3A;
+    --color-disabled: #1C1C1C;
+    --color-main: #FFFFFF;
+    --color-title: #EDEDED;
+    --color-body: #D1D1D1;
+    --color-subtle: #A0A0A0;
+    --color-disabledtext: #666666;
+    /* Semantic Colors */
+    --color-success: #4ADE80;
+    --color-error: #EF4444;
+    --color-warning: #FACC15;
+    /* Glassmorphism */
+    --color-glass-dark: var(--color-glass-dark-val);
+    --color-glass-light: var(--color-glass-light-val);
+    --color-blanket: var(--color-blanket-val);
+
+    /* Typography */
+    --font-body: 'Work Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    --font-heading: 'Rajdhani', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    --text-40: 2.5rem;
+    --text-36: 2.25rem;
+    --text-32: 2rem;
+    --text-24: 1.5rem;
+    --text-20: 1.25rem;
+    --text-16: 1rem;
+    --text-14: 0.875rem;
+    --text-12: 0.75rem;
+
+    /* Effects */
+    --shadow-glow-1: 0 0 8px rgba(255, 255, 255, 0.5);
+    --shadow-glow-2: 0 0 32px 4px rgba(255, 255, 255, 0.5);
+    --shadow-glow-brand-1: 0 0 16px rgba(255, 95, 4, 0.5);
+    --shadow-glow-brand-2: 0 0 32px 8px rgba(255, 95, 4, 0.9);
+    --shadow-glow-success: 0 0 32px 4px rgba(74, 222, 128, 0.5);
+
+    /* Radius */
+    --radius-4: 4px;
+    --radius-8: 8px;
+    --radius-16: 16px;
+    --radius-32: 32px;
+
+    /* Transitions */
+    --transition-150: 150ms ease-in-out;
+    --transition-300: 300ms ease-in-out;
+    --transition-600: 600ms ease-in-out;
+
+    /* Breakpoints */
+    --breakpoint-tablet: 768px;
+    --breakpoint-desktop: 1024px;
+}
+
+@utility container {
+    margin: 0 auto;
+    padding: 32px 16px;
+
+    @media screen and (min-width: 576px) {
+        max-width: 540px;
+    }
+
+    @media screen and (min-width: 768px) {
+        max-width: 720px;
+    }
+
+    @media screen and (min-width: 992px) {
+        max-width: 960px;
+    }
+
+    @media screen and (min-width: 1200px) {
+        max-width: 1140px;
+    }
+}

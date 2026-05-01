@@ -1,0 +1,9 @@
+/* States */
+@mixin btn-disabled {
+    background: var(--color-disabled);
+    border-color: var(--color-disabled);
+    color: var(--color-disabledtext);
+    box-shadow: none;
+    opacity: 0.5;
+    cursor: not-allowed;
+}
