@@ -316,6 +316,12 @@ select {
     text-transform: capitalize;
     transition: border-color var(--transition-300);
 
+    option,
+    optgroup {
+        background-color: var(--color-surface);
+        color: var(--color-main);
+    }
+
     &:hover,
     &:focus,
     &:focus-visible {
@@ -499,6 +505,7 @@ dialog {
     line-height: 1.2em;
     color: var(--color-subtle);
     cursor: default;
+    text-transform: capitalize;
 
     &::before {}
 

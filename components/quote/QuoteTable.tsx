@@ -1,19 +1,19 @@
-'use client';
+import CreateChapter from "./CreateChapter"
+import { useQuote } from "@/hooks/useQuote"
+import ChapterSection from "./ChapterSection"
 
-import { useQuote } from "@/hooks/useQuote";
 
 export default function QuoteTable() {
-    const { quote, isLoadingQuote, isErrorQuote } = useQuote();
+    const { chapterTree, quote } = useQuote()
 
-    if (isLoadingQuote) {
-        return <p>Loading...</p>
-    }
-
-    if (isErrorQuote) {
-        return <p>Error</p>
-    }
 
     return (
-        <p>{quote?.id}</p>
+        <div className="quote">
+            {chapterTree.map((rootNode) => (
+                <ChapterSection key={rootNode.id} node={rootNode} currentQuote={quote} />
+            ))}
+
+            <CreateChapter />
+        </div>
     )
 }

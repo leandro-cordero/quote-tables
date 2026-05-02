@@ -1,6 +1,7 @@
 @import "tailwindcss";
 
 :root {
+    color-scheme: dark;
     --color-glass-dark-val: rgba(0, 0, 0, 0.25);
     --color-glass-light-val: rgba(255, 255, 255, 0.25);
     --color-blanket-val: rgba(0, 0, 0, 0.85);
