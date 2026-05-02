@@ -1,36 +1,44 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Quote Tables 🏗️
 
-## Getting Started
+Welcome to **Quote Tables**! This repository is a public showcase of an advanced, interactive quotation table built for the construction and services industry. It demonstrates handling complex, deeply nested data structures, optimistic UI updates, and real-time financial calculations.
 
-First, run the development server:
+*Note for Recruiters: This project was built by **Leandro Cordero**. It has been explicitly scoped down from my real SaaS application, **Metrik**, into a standalone portfolio piece to demonstrate core frontend and state management engineering skills without the friction of authentication or onboarding.*
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## 🚀 Key Features
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- **Infinite Nested Hierarchies (Chapters & Subchapters):** Uses recursive React components (`ChapterSection`) to render an N-depth tree of quote chapters and their respective work items.
+- **Dynamic Financial Derivations:** Calculates internal costs, commercial costs, and margins on the fly from the lowest leaf node (Work Item) up to the root quote, dynamically rolling up the numbers.
+- **Optimistic UI Updates:** Provides instantaneous feedback. Operations like updating a work item's cost or quantity immediately reflect in the UI and automatically update the React Query cache, ensuring a snappy user experience.
+- **Debounced Mutations:** Form inputs automatically save to the database using debounced hooks, reducing unnecessary API calls while maintaining a seamless, "save-less" experience.
+- **Dark Mode Native Elements:** A sophisticated SCSS architecture combined with Tailwind CSS v4 for layout, including custom `color-scheme` implementations to ensure native dropdowns and scrollbars perfectly match the dark theme.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🛠️ Tech Stack
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- **Framework:** Next.js 16 (App Router)
+- **Library:** React 19
+- **State Management & Caching:** `@tanstack/react-query` v5
+- **Styling:** Tailwind CSS v4 + SCSS + CSS Variables
+- **Backend/Database:** Supabase (PostgreSQL)
+- **Language:** TypeScript
 
-## Learn More
+## 🧠 Architectural Highlights
 
-To learn more about Next.js, take a look at the following resources:
+### 1. State Management (React Query as the Single Source of Truth)
+Instead of relying on heavy global state managers like Redux or Zustand, this application uses `react-query` to manage the central state (`financialData`). Mutations directly update the cache via `setQueryData`, causing the UI to accurately recalculate totals locally without needing to constantly refetch the entire tree from the server.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### 2. Recursive Rendering
+The data is mapped into a structured `ChapterNode` tree on the client (`utils/mappers.ts`). The `ChapterSection.tsx` component recursively renders itself to handle infinitely deep subchapters, dynamically indenting and organizing the DOM structure cleanly.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### 3. Database Interactions via RPCs
+To guarantee atomicity and simplify the frontend, complex database actions (like upserting a work item and recalculating order indexes) are handled on the backend via PostgreSQL functions (RPCs). The frontend calls these endpoints through the Supabase client.
 
-## Deploy on Vercel
+## 🌐 Live Demo
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+I invite you to explore the live, fully functional application here:
+👉 **[https://quote-table.netlify.app/](https://quote-table.netlify.app/)**
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+You can test out the dynamic tree structure by adding chapters, subchapters, and work items, and watch the state instantly recalculate in real-time.
+
+---
+
+*Thank you for taking the time to review my code! I'm Leandro Cordero, and I'd be happy to discuss any of the design patterns or architectural choices implemented in this repository.*
