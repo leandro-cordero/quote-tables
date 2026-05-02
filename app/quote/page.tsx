@@ -1,7 +1,10 @@
+import QuoteTable from "@/components/quote/QuoteTable";
+
+
 export default function QuoteTablePage() {
     return (
         <main className="container grow">
-            <p>Quote Table</p>
+            <QuoteTable />
         </main>
     );
 }

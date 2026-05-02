@@ -11,7 +11,7 @@ export default function Home() {
             </div>
             <div className="flex flex-wrap gap-2">
                 <Link
-                    href="/quote-table"
+                    href="/quote"
                     className="grow btn btn--gold"
                     aria-label="Go to quote table demo"
                 >

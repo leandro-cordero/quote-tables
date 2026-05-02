@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Work_Sans, Rajdhani } from "next/font/google"
 import "@/styles/styles.scss";
 import Footer from "@/components/Footer";
+import Providers from "@/app/providers"
 
 
 const worksans = Work_Sans({
@@ -25,8 +26,10 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
     return (
         <html lang="en">
             <body className="min-h-full flex flex-col">
-                {children}
-                <Footer />
+                <Providers>
+                    {children}
+                    <Footer />
+                </Providers>
             </body>
         </html>
     );
