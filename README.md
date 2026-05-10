@@ -1,4 +1,5 @@
 # Quote Tables 🏗️
+[![Run Tests](https://github.com/leandro-cordero/quote-tables/actions/workflows/test.yml/badge.svg)](https://github.com/leandro-cordero/quote-tables/actions/workflows/test.yml)
 
 Welcome to **Quote Tables**! This repository is a public showcase of an advanced, interactive quotation table built for the construction and services industry. It demonstrates handling complex, deeply nested data structures, optimistic UI updates, and real-time financial calculations.
 
@@ -31,6 +32,15 @@ The data is mapped into a structured `ChapterNode` tree on the client (`utils/ma
 
 ### 3. Database Interactions via RPCs
 To guarantee atomicity and simplify the frontend, complex database actions (like upserting a work item and recalculating order indexes) are handled on the backend via PostgreSQL functions (RPCs). The frontend calls these endpoints through the Supabase client.
+
+## 🧪 Testing & CI/CD
+
+This repository includes testing practices using **Jest** and **React Testing Library**:
+- **Unit & Logic Tests:** Pure functions and data transformers (e.g., recursive tree builders) are tested to ensure robust data integrity.
+- **Component Tests:** UI components are tested using semantic, accessible DOM queries (`getByRole`, `getByText`), validating proper rendering and state handling without relying on brittle `data-testid` selectors.
+- **Hook & Integration Tests:** Custom React Query hooks are tested inside a mocked `QueryClientProvider` to specifically validate complex behaviors like optimistic UI updates and cache manipulation.
+
+**Continuous Integration (CI):** A GitHub Actions workflow (`test.yml`) runs the test suite on every push to `master` and on all Pull Requests, ensuring code reliability prior to deployment.
 
 ## 🌐 Live Demo
 
