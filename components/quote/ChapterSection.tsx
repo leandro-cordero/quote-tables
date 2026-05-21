@@ -17,17 +17,11 @@ export default function ChapterSection({ node, currentQuote, depth = 0 }: Chapte
     const [isExpanded, setIsExpanded] = useState(true)
     const { deleteChapter } = useQuote()
 
-    const indentStyle = {
-        paddingLeft: `${depth * 20}px`
-    }
 
     if (!currentQuote) return null
 
     return (
-        <section
-            style={indentStyle}
-            className={`chapter ${isExpanded ? 'chapter--expanded' : ''} ${depth > 0 ? 'chapter--subchapter' : ''}`}
-        >
+        <section className={`chapter ${isExpanded ? 'chapter--expanded' : ''} ${depth > 0 ? 'chapter--subchapter' : ''}`} >
             <div className="chapter__header">
                 <div className="header__title">
                     <button
@@ -62,7 +56,7 @@ export default function ChapterSection({ node, currentQuote, depth = 0 }: Chapte
 
             <div className="chapter__content">
                 {/* Work Items */}
-                <div style={{ marginLeft: `${(depth + 1) * 20}px` }}>
+                <div className="chapter__workitems">
                     <WorkItemsTable
                         workItems={node.workItems || []}
                         metricSystem={currentQuote.metricSystem}
@@ -82,9 +76,7 @@ export default function ChapterSection({ node, currentQuote, depth = 0 }: Chapte
 
                 {/* Create Subchapter */}
                 {depth < 3 && (
-                    <div style={{ marginLeft: `${(depth + 1) * 20}px` }}>
-                        <CreateChapter isSubChapter={true} parentId={node.id} />
-                    </div>
+                    <CreateChapter isSubChapter={true} parentId={node.id} />
                 )}
             </div>
         </section>
