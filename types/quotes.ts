@@ -41,24 +41,30 @@ export type Chapter = {
     updatedAt: Date;
 }
 
-export type WorkItem = {
-    id: string;
-    quoteVersionId: string;
-    chapterId: string;
+export interface InputWorkItem {
+    id?: string;
+    quoteVersionId?: string;
+    chapterId?: string;
 
-    concept: string;
-    quantity: number;
-    unit: Unit;
+    concept?: string;
+    quantity?: number;
+    unit?: Unit;
 
-    unitPriceInternal: number;
+    unitPriceInternal?: number;
+    margin?: number;
+    orderIndex?: number;
+}
+
+export interface WorkItem extends Required<InputWorkItem> {
     unitPriceCommercial: number;
+
     totalInternal: number;
     totalCommercial: number;
-    margin: number;
-    orderIndex: number;
 
     createdAt: Date;
+    createdBy: string;
     updatedAt: Date;
+    updatedBy: string;
 }
 
 export type IndexedWorkItem = WorkItem & {

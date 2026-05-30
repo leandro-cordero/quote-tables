@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useRef, useState, useEffect } from "react";
 import { AGNOSTIC_UNITS, METRIC_UNITS, IMPERIAL_UNITS } from "@/utils/constants";
 import type { MetricSystem, IndexedWorkItem } from "@/types";
 import { useQuote } from "@/hooks/useQuote";
@@ -13,19 +13,29 @@ interface CreateWorkItemProps {
 export default function WorkItemInput({ metricSystem, chapterId, workItem }: CreateWorkItemProps) {
     const { upsertWorkItem, quote, deleteWorkItem, updateWorkItemCache } = useQuote()
     const units = metricSystem == "metric" ? METRIC_UNITS : IMPERIAL_UNITS
-
-    const [workItemData, setWorkItemData] = useState({
-        workitem_concept: workItem?.concept || "",
-        workitem_quantity: workItem?.quantity || 0,
-        workitem_unit: workItem?.unit || "",
-        workitem_unit_price: workItem?.unitPriceInternal || 0,
-        workitem_margin: (workItem?.margin as number * 100) || 0,
-    })
+    const initialWorkItemData = {
+        workitemConcept: workItem?.concept || "",
+        workitemQuantity: workItem?.quantity ?? null,
+        workitemUnit: workItem?.unit || "",
+        workitemUnitPrice: workItem?.unitPriceInternal ?? null,
+        workitemMargin: workItem?.margin ? (workItem?.margin as number * 100) : null,
+    }
+    const initialData = useRef(initialWorkItemData)
+    const [workItemData, setWorkItemData] = useState(initialWorkItemData)
 
     // Debounced upsert
     useEffect(() => {
+        // Skip if initial and current are the same
+        const hasChanged =
+            workItemData.workitemConcept !== initialData.current.workitemConcept ||
+            workItemData.workitemQuantity !== initialData.current.workitemQuantity ||
+            workItemData.workitemUnit !== initialData.current.workitemUnit ||
+            workItemData.workitemUnitPrice !== initialData.current.workitemUnitPrice ||
+            workItemData.workitemMargin !== initialData.current.workitemMargin
+        if (!hasChanged) return
+
         if (!quote?.id) return
-        if (workItemData.workitem_concept === "" || workItemData.workitem_quantity === 0 || workItemData.workitem_unit === "") return
+        if (workItemData.workitemConcept === "" || !workItemData.workitemQuantity || workItemData.workitemQuantity <= 0 || workItemData.workitemUnit === "") return
 
         const timer = setTimeout(async () => {
             try {
@@ -33,23 +43,25 @@ export default function WorkItemInput({ metricSystem, chapterId, workItem }: Cre
                     id: workItem?.id || undefined,
                     quoteVersionId: workItem?.id ? undefined : quote.id,
                     chapterId: workItem?.id ? undefined : chapterId,
-                    concept: workItemData.workitem_concept || undefined,
-                    quantity: Number(workItemData.workitem_quantity) || undefined,
-                    unit: workItemData.workitem_unit || undefined,
-                    internalUnitPrice: Number(workItemData.workitem_unit_price) || undefined,
-                    marginPercentage: Number(workItemData.workitem_margin) / 100 || undefined,
+                    concept: workItemData.workitemConcept || undefined,
+                    quantity: Number(workItemData.workitemQuantity) || undefined,
+                    unit: workItemData.workitemUnit || undefined,
+                    unitPriceInternal: Number(workItemData.workitemUnitPrice) || undefined,
+                    margin: Number(workItemData.workitemMargin) / 100 || undefined,
                 })
             } catch (err) {
                 console.error('Failed to upsert work item:', err)
             } finally {
                 if (!workItem?.id) {
-                    setWorkItemData({
-                        workitem_concept: "",
-                        workitem_quantity: 0,
-                        workitem_unit: AGNOSTIC_UNITS[0],
-                        workitem_unit_price: 0,
-                        workitem_margin: 0,
-                    })
+                    const reset = {
+                        workitemConcept: "",
+                        workitemQuantity: null,
+                        workitemUnit: "",
+                        workitemUnitPrice: null,
+                        workitemMargin: null,
+                    }
+                    setWorkItemData(reset)
+                    initialData.current = reset
                 }
             }
         }, 3000)
@@ -85,7 +97,7 @@ export default function WorkItemInput({ metricSystem, chapterId, workItem }: Cre
                         type="button"
                         className="workitems__delete"
                         onClick={() => deleteWorkItem(workItem.id)}
-                        title={'Delete workitem ' + workItemData.workitem_concept}
+                        title={'Delete workitem ' + workItemData.workitemConcept}
                     >
                         <i className="icon-delete-outline text-24"></i>
                     </button>
@@ -94,9 +106,10 @@ export default function WorkItemInput({ metricSystem, chapterId, workItem }: Cre
             <td>
                 <input
                     type="text"
-                    name="workitem_concept"
+                    name="workitemConcept"
                     onChange={handleChange}
-                    value={workItemData.workitem_concept}
+                    value={workItemData.workitemConcept}
+                    aria-label={workItem ? 'Edit workitem concept' : 'Add workitem concept'}
                     placeholder="Concept"
                     autoComplete="off"
                 />
@@ -104,17 +117,20 @@ export default function WorkItemInput({ metricSystem, chapterId, workItem }: Cre
             <td>
                 <input
                     type="text"
-                    name="workitem_quantity"
+                    name="workitemQuantity"
                     onChange={handleChange}
-                    value={workItemData.workitem_quantity}
+                    value={workItemData.workitemQuantity ?? ''}
+                    aria-label={workItem ? 'Edit workitem quantity' : 'Add workitem quantity'}
+                    placeholder="0"
                     autoComplete="off"
                 />
             </td>
             <td>
                 <select
-                    name="workitem_unit"
+                    name="workitemUnit"
                     onChange={handleChange}
-                    value={workItemData.workitem_unit}
+                    value={workItemData.workitemUnit}
+                    aria-label={workItem ? 'Change workitem unit' : 'Select workitem unit'}
                 >
                     <option value="" disabled>Select</option>
                     <optgroup label="Agnostic units">
@@ -130,26 +146,33 @@ export default function WorkItemInput({ metricSystem, chapterId, workItem }: Cre
                     <span className="text-disabledtext">$</span>
                     <input
                         type="text"
-                        name="workitem_unit_price"
+                        name="workitemUnitPrice"
                         onChange={handleChange}
-                        value={workItemData.workitem_unit_price}
+                        value={workItemData.workitemUnitPrice ?? ''}
+                        aria-label={workItem ? 'Edit workitem unit price' : 'Add workitem unit price'}
+                        placeholder="0"
                     />
-                    {workItemData.workitem_unit && <span className="text-disabledtext">/ {workItemData.workitem_unit}</span>}
+                    {workItemData.workitemUnit && <span className="text-disabledtext">/ {workItemData.workitemUnit}</span>}
                 </span>
             </td>
             <td>
                 <span className="text-disabledtext">
                     <span>$</span>
-                    {Number(workItemData.workitem_quantity * workItemData.workitem_unit_price).toFixed(2)}
+                    {workItemData.workitemQuantity && workItemData.workitemUnitPrice
+                        ? Number(workItemData.workitemQuantity * workItemData.workitemUnitPrice).toFixed(2)
+                        : '0.00'
+                    }
                 </span>
             </td>
             <td>
                 <span>
                     <input
                         type="text"
-                        name="workitem_margin"
+                        name="workitemMargin"
                         onChange={handleChange}
-                        value={workItemData.workitem_margin}
+                        value={workItemData.workitemMargin ?? ''}
+                        aria-label={workItem ? 'Edit workitem margin' : 'Add workitem margin'}
+                        placeholder="0"
                         autoComplete="off"
                     />
                     <span className="text-disabledtext">%</span>
@@ -158,14 +181,22 @@ export default function WorkItemInput({ metricSystem, chapterId, workItem }: Cre
             <td>
                 <span className="text-disabledtext">
                     $
-                    <span className="grow">{Number(workItemData.workitem_quantity * workItemData.workitem_unit_price * (1 + workItemData.workitem_margin / 100)).toFixed(2)}</span>
-                    {workItemData.workitem_unit && <span className="text-disabledtext">/ {workItemData.workitem_unit}</span>}
+                    <span className="grow">
+                        {workItemData.workitemQuantity && workItemData.workitemUnitPrice && workItemData.workitemMargin
+                            ? Number(workItemData.workitemQuantity * workItemData.workitemUnitPrice * (1 + workItemData.workitemMargin / 100)).toFixed(2)
+                            : '0.00'
+                        }
+                    </span>
+                    {workItemData.workitemUnit && <span className="text-disabledtext">/ {workItemData.workitemUnit}</span>}
                 </span>
             </td>
             <td>
                 <span className="text-disabledtext">
                     <span>$</span>
-                    {Number(workItemData.workitem_quantity * workItemData.workitem_unit_price * (1 + workItemData.workitem_margin / 100)).toFixed(2)}
+                    {workItemData.workitemQuantity && workItemData.workitemUnitPrice && workItemData.workitemMargin
+                        ? Number(workItemData.workitemQuantity * workItemData.workitemUnitPrice * (1 + workItemData.workitemMargin / 100)).toFixed(2)
+                        : '0.00'
+                    }
                 </span>
             </td>
         </>

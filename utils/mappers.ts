@@ -38,32 +38,27 @@ export function normalizeChapterData(data: any): Chapter {
 
 // Transforms a work item object
 export function normalizeWorkItemData(data: any): WorkItem {
-    const quantity = Number(data.quantity) || 0;
-    const internalUnitPrice = Number(data.internal_unit_price) || 0;
-    const margin = Number(data.margin_percentage) || 0;
-    const totalInternal = quantity * internalUnitPrice;
-    const unitPriceCommercial = internalUnitPrice * (1 + margin);
-    const totalCommercial = quantity * unitPriceCommercial;
-
     return {
         id: data.id as string,
         quoteVersionId: data.quote_version_id as string,
         chapterId: data.chapter_id as string,
 
         concept: data.concept as string,
-        quantity: quantity,
+        quantity: data.quantity as number,
         unit: data.unit as string,
 
-        unitPriceInternal: internalUnitPrice,
-        totalInternal: totalInternal,
-        margin: margin,
-        unitPriceCommercial: unitPriceCommercial,
-        totalCommercial: totalCommercial,
+        unitPriceInternal: data.internal_unit_price as number,
+        totalInternal: data.internal_unit_price * data.quantity,
+        margin: data.margin_percentage as number,
+        unitPriceCommercial: data.internal_unit_price * (1 + data.margin_percentage),
+        totalCommercial: data.internal_unit_price * (1 + data.margin_percentage) * data.quantity,
 
         orderIndex: data.order_index as number,
 
         createdAt: new Date(data.created_at as string),
+        createdBy: data.created_by as string,
         updatedAt: new Date(data.updated_at as string),
+        updatedBy: data.updated_by as string
     }
 }
 

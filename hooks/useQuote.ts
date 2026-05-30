@@ -2,9 +2,8 @@ import { useMemo } from "react";
 import { quoteService } from "@/services/quoteService";
 import { DEFAULT_QUOTE_ID } from "@/utils/constants";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import type { Quote } from "@/types";
+import type { Quote, InputWorkItem } from "@/types";
 import { buildChapterTree } from "@/utils/mappers";
-import type { UpsertWorkItemParams } from "@/services/quoteService";
 
 
 export function useQuote() {
@@ -60,7 +59,7 @@ export function useQuote() {
 
     // --- Work Item Mutations ---
     const { mutateAsync: upsertWorkItem } = useMutation({
-        mutationFn: (params: UpsertWorkItemParams) => quoteService.upsertWorkItem(params),
+        mutationFn: (params: InputWorkItem) => quoteService.upsertWorkItem(params),
         onSuccess: (savedWorkItem) => {
             setFinancialData((old: any) => {
                 if (!old) return old;

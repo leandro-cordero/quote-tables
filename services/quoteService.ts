@@ -1,19 +1,7 @@
 import { createClient } from "@/lib/supabase/client"
-import type { Quote, Unit, WorkItem } from "@/types"
+import type { Quote, Unit, WorkItem, InputWorkItem } from "@/types"
 import { normalizeQuoteData, normalizeChapterData, normalizeWorkItemData } from "@/utils/mappers"
 
-
-export type UpsertWorkItemParams = {
-    id?: string;
-    quoteVersionId?: string;
-    chapterId?: string;
-    concept?: string;
-    quantity?: number;
-    unit?: Unit;
-    internalUnitPrice?: number;
-    marginPercentage?: number;
-    orderIndex?: number;
-}
 
 export const quoteService = {
     supabase: createClient(),
@@ -95,7 +83,7 @@ export const quoteService = {
     },
 
     // Work Item
-    async upsertWorkItem(params: UpsertWorkItemParams): Promise<WorkItem> {
+    async upsertWorkItem(params: InputWorkItem): Promise<WorkItem> {
         const rpcParams: Record<string, unknown> = {};
 
         if (params.id !== undefined) rpcParams.p_id = params.id;
@@ -104,8 +92,8 @@ export const quoteService = {
         if (params.concept !== undefined) rpcParams.p_concept = params.concept;
         if (params.quantity !== undefined) rpcParams.p_quantity = params.quantity;
         if (params.unit !== undefined) rpcParams.p_unit = params.unit;
-        if (params.internalUnitPrice !== undefined) rpcParams.p_internal_unit_price = params.internalUnitPrice;
-        if (params.marginPercentage !== undefined) rpcParams.p_margin_percentage = params.marginPercentage;
+        if (params.unitPriceInternal !== undefined) rpcParams.p_internal_unit_price = params.unitPriceInternal;
+        if (params.margin !== undefined) rpcParams.p_margin_percentage = params.margin;
         if (params.orderIndex !== undefined) rpcParams.p_order_index = params.orderIndex;
 
         const { data, error } = await this.supabase
