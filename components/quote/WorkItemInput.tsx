@@ -116,7 +116,7 @@ export default function WorkItemInput({ metricSystem, chapterId, workItem }: Cre
             </td>
             <td>
                 <input
-                    type="text"
+                    type="number"
                     name="workitemQuantity"
                     onChange={handleChange}
                     value={workItemData.workitemQuantity ?? ''}
@@ -145,7 +145,7 @@ export default function WorkItemInput({ metricSystem, chapterId, workItem }: Cre
                 <span>
                     <span className="text-disabledtext">$</span>
                     <input
-                        type="text"
+                        type="number"
                         name="workitemUnitPrice"
                         onChange={handleChange}
                         value={workItemData.workitemUnitPrice ?? ''}
@@ -167,7 +167,7 @@ export default function WorkItemInput({ metricSystem, chapterId, workItem }: Cre
             <td>
                 <span>
                     <input
-                        type="text"
+                        type="number"
                         name="workitemMargin"
                         onChange={handleChange}
                         value={workItemData.workitemMargin ?? ''}

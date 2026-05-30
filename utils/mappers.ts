@@ -44,14 +44,14 @@ export function normalizeWorkItemData(data: any): WorkItem {
         chapterId: data.chapter_id as string,
 
         concept: data.concept as string,
-        quantity: data.quantity as number,
+        quantity: Number(data.quantity) || 0,
         unit: data.unit as string,
 
-        unitPriceInternal: data.internal_unit_price as number,
-        totalInternal: data.internal_unit_price * data.quantity,
-        margin: data.margin_percentage as number,
-        unitPriceCommercial: data.internal_unit_price * (1 + data.margin_percentage),
-        totalCommercial: data.internal_unit_price * (1 + data.margin_percentage) * data.quantity,
+        unitPriceInternal: Number(data.internal_unit_price) || 0,
+        totalInternal: Number(data.internal_unit_price) * Number(data.quantity) || 0,
+        margin: Number(data.margin_percentage) || 0,
+        unitPriceCommercial: Number(data.internal_unit_price) * (1 + Number(data.margin_percentage)) || 0,
+        totalCommercial: Number(data.internal_unit_price) * (1 + Number(data.margin_percentage)) * Number(data.quantity) || 0,
 
         orderIndex: data.order_index as number,
 
